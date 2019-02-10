@@ -81,6 +81,17 @@ func NewAnteHandler(ak AccountKeeper, fck FeeCollectionKeeper) sdk.AnteHandler {
 			}
 		}()
 
+		// CENSOR UNJAIL TX IN MEMPOOL
+		if ctx.IsCheckTx() {
+			msgs := tx.GetMsgs()
+			for _, msg := range msgs {
+				if msg.Type() == "unjail" {
+					return newCtx, res, true
+				}
+			}
+		}
+		// END CENSOR
+
 		if err := tx.ValidateBasic(); err != nil {
 			return newCtx, err.Result(), true
 		}
