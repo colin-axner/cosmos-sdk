@@ -67,11 +67,12 @@ func QueryTxsRequestHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
 		heightStr := r.FormValue("height")
 		if heightStr != "" {
 			if height, err := strconv.ParseInt(heightStr, 10, 64); err != nil && height == 0 {
+				fmt.Println("Query gen txs")
 				genutilrest.QueryGenesisTxs(cliCtx, w)
 				return
 			}
 		}
-
+		fmt.Println("did not query gen txs")
 		var (
 			tags        []string
 			txs         []sdk.TxResponse
